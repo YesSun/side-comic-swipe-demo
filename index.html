@@ -169,37 +169,6 @@
         height: 14%;
       }
 
-      .choice-preset-mask,
-      .choice-draft-mask {
-        position: absolute;
-        display: block;
-        pointer-events: none;
-      }
-
-      .choice-preset-mask {
-        left: 27%;
-        top: 42.9%;
-        width: 62.5%;
-        height: 11.3%;
-        border-radius: 8px;
-        background:
-          radial-gradient(circle at 18% 32%, rgb(243 210 93 / 35%) 0 2px, transparent 3px),
-          radial-gradient(circle at 82% 72%, rgb(243 210 93 / 28%) 0 2px, transparent 3px),
-          linear-gradient(180deg, #fff8eb 0%, #fff2df 100%);
-      }
-
-      .choice-draft-mask {
-        left: 9.2%;
-        top: 55.2%;
-        width: 83%;
-        height: 10.9%;
-        display: none;
-        border-radius: 10px;
-        background:
-          radial-gradient(circle at 12% 80%, rgb(235 198 98 / 20%) 0 2px, transparent 3px),
-          linear-gradient(180deg, #fffdf4 0%, #fff8e8 100%);
-      }
-
       .choice-form {
         position: absolute;
         left: 16.5%;
@@ -735,8 +704,6 @@
       <button class="branch-trigger" type="button">选择支线</button>
       <div class="choice-overlay" aria-hidden="true">
         <img src="./assets/page-08-popup.png" alt="" draggable="false" />
-        <div class="choice-preset-mask" aria-hidden="true"></div>
-        <div class="choice-draft-mask" aria-hidden="true"></div>
         <button
           class="choice-action choice-action--original"
           type="button"
