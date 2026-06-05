@@ -6,12 +6,13 @@
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="theme-color" content="#252b2c" />
     <title>支线漫画横滑 Demo</title>
     <style>
       :root {
         color-scheme: dark;
         --comic-ratio: 588 / 1280;
-        --surface: #111;
+        --surface: #252b2c;
         --app-height: 100dvh;
       }
 
@@ -37,14 +38,14 @@
 
       .stage {
         position: fixed;
-        top: 0;
-        left: 0;
-        width: 100vw;
-        height: 100vh;
-        height: 100dvh;
-        height: var(--app-height, 100dvh);
+        inset: 0;
+        width: auto;
+        height: auto;
+        min-height: 100vh;
+        min-height: 100dvh;
+        min-height: var(--app-height, 100dvh);
         overflow: hidden;
-        background: #111;
+        background: var(--surface);
         box-shadow: none;
         isolation: isolate;
       }
@@ -82,7 +83,7 @@
         scroll-snap-align: start;
         scroll-snap-stop: always;
         overflow: hidden;
-        background: #111;
+        background: var(--surface);
       }
 
       .comic-page img {
@@ -171,98 +172,14 @@
         height: 14%;
       }
 
-      .choice-form {
+      .choice-action--custom {
         position: absolute;
-        left: 16.5%;
-        top: 59.4%;
-        width: 76%;
-        height: 9.6%;
-        display: block;
-        padding: 0;
-        border: 0;
-        background: transparent;
-        box-shadow: none;
+        left: 15%;
+        top: 45.2%;
+        width: 77.5%;
+        height: 13.6%;
       }
 
-      .custom-branch-input {
-        position: absolute;
-        left: 0;
-        top: 38%;
-        width: 55%;
-        height: 46%;
-        border: 0;
-        border-radius: 0;
-        padding: 0 8px;
-        background: transparent;
-        color: #6b6258;
-        font-family: inherit;
-        font-size: 17px;
-        font-weight: 800;
-        line-height: 1.2;
-        outline: none;
-        appearance: none;
-      }
-
-      .custom-branch-input::placeholder {
-        color: transparent;
-      }
-
-      .custom-branch-submit {
-        position: absolute;
-        right: 4%;
-        top: 28%;
-        width: 24%;
-        height: 56%;
-        border: 0;
-        border-radius: 0;
-        background: transparent;
-        color: transparent;
-        font-size: 0;
-        appearance: none;
-      }
-
-      .stage.has-custom-branch .custom-branch-input {
-        top: 8%;
-        width: 62%;
-        color: #171329;
-        font-size: 16px;
-        font-weight: 900;
-        line-height: 1;
-        overflow: hidden;
-        text-overflow: ellipsis;
-      }
-
-      .stage.has-custom-branch .custom-branch-submit {
-        right: 4%;
-        top: 6%;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        width: 24%;
-        height: 54%;
-        border-radius: 999px;
-        background: #ffe7a6;
-        color: #a35b00;
-        font-family: inherit;
-        font-size: 14px;
-        font-weight: 900;
-        line-height: 1;
-        opacity: 1;
-        box-shadow: 0 2px 8px rgb(99 54 0 / 12%);
-        pointer-events: none;
-      }
-
-      .stage.is-custom-branch-ready .choice-form {
-        cursor: pointer;
-      }
-
-      .stage.is-custom-branch-ready .custom-branch-submit {
-        background: #e7f8ff;
-        color: #1268c4;
-        pointer-events: auto;
-      }
-
-      .custom-avatar,
       .feed-avatar-art {
         position: relative;
         display: grid;
@@ -275,7 +192,6 @@
           linear-gradient(135deg, #ffde52, #3bb7ff);
       }
 
-      .custom-avatar::before,
       .feed-avatar-art::before {
         content: "";
         position: absolute;
@@ -287,7 +203,6 @@
         box-shadow: -8px 7px 0 -5px #151313, 8px 7px 0 -5px #151313;
       }
 
-      .custom-avatar::after,
       .feed-avatar-art::after {
         content: "新";
         position: relative;
@@ -297,42 +212,6 @@
         font-weight: 900;
         font-size: 13px;
         text-shadow: 0 1px 2px rgb(0 0 0 / 45%);
-      }
-
-      .custom-avatar {
-        width: 37px;
-        height: 37px;
-        border: 2px solid #fff;
-      }
-
-      .custom-branch-body {
-        min-width: 0;
-      }
-
-      .custom-branch-name {
-        color: #8d4dff;
-        font: 900 16px/1.1 inherit;
-      }
-
-      .custom-branch-text {
-        margin-top: 2px;
-        color: #171329;
-        font: 900 15px/1.16 inherit;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-      }
-
-      .stage.is-generating-branch .custom-branch-submit::before {
-        content: "";
-        display: inline-block;
-        width: 6px;
-        height: 6px;
-        margin-right: 4px;
-        border-radius: 50%;
-        background: currentColor;
-        animation: pulse 760ms ease-in-out infinite alternate;
-        vertical-align: 1px;
       }
 
       .fixed-feed {
@@ -543,9 +422,7 @@
 
       @media (max-width: 640px) {
         .stage {
-          width: 100vw;
-          height: 100dvh;
-          height: var(--app-height, 100dvh);
+          inset: 0;
           box-shadow: none;
         }
       }
@@ -653,18 +530,11 @@
           type="button"
           aria-label="选择原作"
         ></button>
-        <form class="choice-form" autocomplete="off">
-          <input
-            class="custom-branch-input"
-            name="branch"
-            type="text"
-            inputmode="text"
-            maxlength="34"
-            placeholder="写下你想看的下一步剧情......"
-            aria-label="填写支线内容"
-          />
-          <button class="custom-branch-submit" type="submit">发布</button>
-        </form>
+        <button
+          class="choice-action choice-action--custom"
+          type="button"
+          aria-label="选择灰太狼支线"
+        ></button>
       </div>
     </main>
 
@@ -681,12 +551,10 @@
       const originalChoiceButton = document.querySelector(
         ".choice-action--original",
       );
-      const branchTriggerButton = document.querySelector(".branch-trigger");
-      const customBranchForm = document.querySelector(".choice-form");
-      const customBranchInput = document.querySelector(".custom-branch-input");
-      const customBranchSubmit = document.querySelector(
-        ".custom-branch-submit",
+      const customChoiceButton = document.querySelector(
+        ".choice-action--custom",
       );
+      const branchTriggerButton = document.querySelector(".branch-trigger");
       let pages = [...document.querySelectorAll(".comic-page:not([hidden])")];
       const progressTrack = document.querySelector(".progress-track");
       const progressThumb = document.querySelector(".progress-thumb");
@@ -730,9 +598,6 @@
       let isChoiceOpen = false;
       let hasSeenChoice = false;
       let activeBranch = "";
-      let hasCustomBranch = false;
-      let isCustomBranchReady = false;
-      let hasContinuedMainAfterCustomSubmit = false;
       let activePointerId = null;
       let progressFrame = 0;
       let overswipeProgress = 0;
@@ -970,20 +835,7 @@
         scheduleProgressUpdate();
       };
 
-      const markCustomBranchReady = () => {
-        if (!hasCustomBranch || isCustomBranchReady) return;
-        isCustomBranchReady = true;
-        customBranchSubmit.textContent = "已生成";
-        customBranchSubmit.disabled = false;
-        stage.classList.remove("is-generating-branch");
-        stage.classList.add("is-custom-branch-ready");
-      };
-
       const openOriginalBranch = () => {
-        if (hasCustomBranch && !isCustomBranchReady) {
-          hasContinuedMainAfterCustomSubmit = true;
-        }
-
         showBranchPages("original", originalBranchPages);
         setChoiceOpen(false);
         requestAnimationFrame(() => {
@@ -993,8 +845,6 @@
       };
 
       const openCustomBranch = () => {
-        if (!isCustomBranchReady) return;
-
         showBranchPages("custom", customBranchPages);
         setChoiceOpen(false);
         requestAnimationFrame(() => {
@@ -1006,9 +856,6 @@
       const openChoiceFromButton = () => {
         if (activeBranch) {
           scrollToPage(mainPageCount - 1);
-        }
-        if (hasContinuedMainAfterCustomSubmit) {
-          markCustomBranchReady();
         }
         setChoiceOpen(true);
       };
@@ -1035,32 +882,6 @@
         scrollToPage(targetPageIndex);
         scheduleProgressUpdate();
         return true;
-      };
-
-      const submitCustomBranch = (event) => {
-        event.preventDefault();
-        if (hasCustomBranch) {
-          if (isCustomBranchReady) {
-            openCustomBranch();
-          }
-          return;
-        }
-        const value = customBranchInput.value.trim();
-        if (!value) {
-          customBranchInput.focus();
-          return;
-        }
-
-        hasCustomBranch = true;
-        isCustomBranchReady = false;
-        hasContinuedMainAfterCustomSubmit = false;
-        customBranchInput.value = `灰太狼：${value}`;
-        customBranchInput.readOnly = true;
-        customBranchSubmit.textContent = "生成中";
-        customBranchSubmit.disabled = true;
-        stage.classList.add("has-custom-branch", "is-generating-branch");
-        stage.classList.remove("is-custom-branch-ready");
-        setChoiceOpen(true);
       };
 
       const updateProgress = () => {
@@ -1209,19 +1030,8 @@
       track.addEventListener("pointerup", finishDrag);
       track.addEventListener("pointercancel", finishDrag);
       originalChoiceButton.addEventListener("click", openOriginalBranch);
+      customChoiceButton.addEventListener("click", openCustomBranch);
       branchTriggerButton.addEventListener("click", openChoiceFromButton);
-      customBranchForm.addEventListener("click", (event) => {
-        if (hasCustomBranch) {
-          if (isCustomBranchReady) {
-            openCustomBranch();
-          }
-          return;
-        }
-        if (event.target !== customBranchSubmit) {
-          customBranchInput.focus();
-        }
-      });
-      customBranchForm.addEventListener("submit", submitCustomBranch);
 
       track.addEventListener(
         "wheel",
