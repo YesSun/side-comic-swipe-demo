@@ -38,12 +38,12 @@
 
       .stage {
         position: fixed;
-        inset: 0;
-        width: auto;
-        height: auto;
-        min-height: 100vh;
-        min-height: 100dvh;
-        min-height: var(--app-height, 100dvh);
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        height: 100dvh;
+        height: var(--app-height, 100dvh);
         overflow: hidden;
         background: var(--surface);
         box-shadow: none;
@@ -422,7 +422,8 @@
 
       @media (max-width: 640px) {
         .stage {
-          inset: 0;
+          width: 100vw;
+          height: var(--app-height, 100dvh);
           box-shadow: none;
         }
       }
@@ -628,15 +629,11 @@
           : 0;
 
       const updateViewportSize = () => {
-        const isNarrowScreen = window.matchMedia("(max-width: 720px)").matches;
         const viewportHeights = [
           window.innerHeight,
           document.documentElement.clientHeight,
           window.visualViewport?.height,
         ];
-        if (isNarrowScreen) {
-          viewportHeights.push(window.screen?.height);
-        }
 
         const appHeight = Math.ceil(
           Math.max(...viewportHeights.filter((height) => height > 0)),
@@ -867,13 +864,13 @@
         let targetPageIndex = currentPageIndex;
 
         if (localX < stageRect.width / 3) {
+          targetPageIndex = currentPageIndex - 1;
+        } else if (localX > (stageRect.width * 2) / 3) {
           if (!activeBranch && currentPageIndex === mainPageCount - 1) {
             setChoiceOpen(true);
             return true;
           }
           targetPageIndex = currentPageIndex + 1;
-        } else if (localX > (stageRect.width * 2) / 3) {
-          targetPageIndex = currentPageIndex - 1;
         } else {
           return false;
         }
