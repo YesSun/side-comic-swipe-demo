@@ -130,18 +130,25 @@
         inset: 0;
         z-index: 5;
         opacity: 0;
+        visibility: hidden;
         pointer-events: none;
         transform: scale(0.9);
         transform-origin: 50% 52%;
         transition:
+          visibility 0ms linear 260ms,
           opacity 160ms ease-out,
           transform 260ms cubic-bezier(0.18, 0.9, 0.24, 1.16);
       }
 
       .stage.is-choice-open .choice-overlay {
         opacity: 1;
+        visibility: visible;
         pointer-events: auto;
         transform: scale(1);
+        transition:
+          visibility 0ms,
+          opacity 160ms ease-out,
+          transform 260ms cubic-bezier(0.18, 0.9, 0.24, 1.16);
       }
 
       .choice-overlay img {
@@ -163,6 +170,11 @@
         background: transparent;
         appearance: none;
         cursor: pointer;
+        pointer-events: none;
+      }
+
+      .stage.is-choice-open .choice-action {
+        pointer-events: auto;
       }
 
       .choice-action--original {
@@ -404,6 +416,29 @@
         gap: 8px;
       }
 
+      .stage.is-choice-button-popping
+        .branch-trigger {
+        animation: choiceButtonPop 360ms cubic-bezier(0.18, 0.9, 0.24, 1.16)
+          both;
+      }
+
+      @keyframes choiceButtonPop {
+        from {
+          opacity: 0;
+          transform: translate(-50%, 18px) scale(0.78);
+        }
+
+        68% {
+          opacity: 1;
+          transform: translate(-50%, -4px) scale(1.04);
+        }
+
+        to {
+          opacity: 1;
+          transform: translate(-50%, 0) scale(1);
+        }
+      }
+
       @keyframes pulse {
         from {
           opacity: 0.35;
@@ -556,6 +591,7 @@
         ".choice-action--custom",
       );
       const branchTriggerButton = document.querySelector(".branch-trigger");
+      const choiceOverlay = document.querySelector(".choice-overlay");
       let pages = [...document.querySelectorAll(".comic-page:not([hidden])")];
       const progressTrack = document.querySelector(".progress-track");
       const progressThumb = document.querySelector(".progress-thumb");
@@ -585,6 +621,12 @@
         comment: { x: 515, y: 891 },
         share: { x: 515, y: 997 },
       };
+      const choicePanelBounds = {
+        x: 40,
+        y: 140,
+        width: 508,
+        height: 720,
+      };
       const mainPageCount = 7;
       const popupProgressIndex = mainPageCount;
       let startX = 0;
@@ -602,6 +644,7 @@
       let activePointerId = null;
       let progressFrame = 0;
       let overswipeProgress = 0;
+      let choiceOpenedAt = 0;
 
       const getPageWidth = () => track.clientWidth || 1;
 
@@ -818,6 +861,8 @@
         isChoiceOpen = isOpen;
         if (isOpen) {
           hasSeenChoice = true;
+          choiceOpenedAt = performance.now();
+          stage.classList.remove("is-choice-button-popping");
         }
         overswipeProgress = isOpen ? 1 : 0;
         if (isOpen) {
@@ -830,6 +875,33 @@
           hasSeenChoice && !isOpen,
         );
         scheduleProgressUpdate();
+      };
+
+      const triggerChoiceButtonPop = () => {
+        stage.classList.remove("is-choice-button-popping");
+        void stage.offsetWidth;
+        stage.classList.add("is-choice-button-popping");
+        window.setTimeout(() => {
+          stage.classList.remove("is-choice-button-popping");
+        }, 420);
+      };
+
+      const closeChoiceToButton = () => {
+        setChoiceOpen(false);
+        triggerChoiceButtonPop();
+      };
+
+      const isInsideChoicePanel = (clientX, clientY) => {
+        const media = getMediaLayout();
+        const sourceX = (clientX - media.x) / media.scale;
+        const sourceY = (clientY - media.y) / media.scale;
+
+        return (
+          sourceX >= choicePanelBounds.x &&
+          sourceX <= choicePanelBounds.x + choicePanelBounds.width &&
+          sourceY >= choicePanelBounds.y &&
+          sourceY <= choicePanelBounds.y + choicePanelBounds.height
+        );
       };
 
       const openOriginalBranch = () => {
@@ -993,7 +1065,7 @@
           const isTapGesture =
             Math.abs(dragDeltaX) < 12 &&
             performance.now() - gestureStartTime < 420;
-          if (isTapGesture && autoSlideFromTap(event.clientX)) {
+          if (isTapGesture && autoSlideFromTap(startX)) {
             return;
           }
 
@@ -1029,6 +1101,22 @@
       originalChoiceButton.addEventListener("click", openOriginalBranch);
       customChoiceButton.addEventListener("click", openCustomBranch);
       branchTriggerButton.addEventListener("click", openChoiceFromButton);
+      choiceOverlay.addEventListener(
+        "click",
+        (event) => {
+          if (!isChoiceOpen) return;
+          if (performance.now() - choiceOpenedAt > 280) return;
+          event.preventDefault();
+          event.stopPropagation();
+        },
+        true,
+      );
+      choiceOverlay.addEventListener("click", (event) => {
+        if (!isChoiceOpen) return;
+        if (event.target.closest(".choice-action")) return;
+        if (isInsideChoicePanel(event.clientX, event.clientY)) return;
+        closeChoiceToButton();
+      });
 
       track.addEventListener(
         "wheel",
