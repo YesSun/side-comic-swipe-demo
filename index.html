@@ -802,13 +802,12 @@
       };
 
       const showBranchPages = (branchName, branchPagesToShow) => {
+        const selectedBranchPages = new Set(branchPagesToShow);
         allBranchPages.forEach((page) => {
-          page.hidden = true;
-        });
-        branchPagesToShow.forEach((page) => {
-          page.hidden = false;
+          page.hidden = !selectedBranchPages.has(page);
         });
         activeBranch = branchName;
+        stage.dataset.activeBranch = branchName;
         stage.classList.toggle("is-original-branch", branchName === "original");
         stage.classList.toggle("is-custom-branch", branchName === "custom");
         refreshPages();
