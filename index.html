@@ -171,68 +171,69 @@
 
       .choice-form {
         position: absolute;
-        left: 12%;
-        top: 56.8%;
+        left: 16.5%;
+        top: 59.4%;
         width: 76%;
-        min-height: 13.5%;
-        display: grid;
-        grid-template-columns: 1fr auto;
-        gap: 8px;
-        align-items: center;
-        padding: 10px 11px;
-        border: 3px solid #f39821;
-        border-radius: 10px;
-        background: #fff8e9;
-        box-shadow:
-          0 7px 0 #a85713,
-          0 14px 22px rgb(0 0 0 / 18%);
+        height: 9.6%;
+        display: block;
+        padding: 0;
+        border: 0;
+        background: transparent;
+        box-shadow: none;
       }
 
       .custom-branch-input {
-        min-width: 0;
-        height: 39px;
-        border: 2px solid #e5dccb;
-        border-radius: 8px;
-        padding: 0 12px;
-        background: #fff;
-        color: #312a22;
-        font: 700 14px/1.2 inherit;
+        position: absolute;
+        left: 0;
+        top: 38%;
+        width: 55%;
+        height: 46%;
+        border: 0;
+        border-radius: 0;
+        padding: 0 8px;
+        background: transparent;
+        color: #6b6258;
+        font-family: inherit;
+        font-size: 17px;
+        font-weight: 800;
+        line-height: 1.2;
         outline: none;
+        appearance: none;
       }
 
       .custom-branch-input::placeholder {
-        color: #a69e94;
+        color: transparent;
       }
 
       .custom-branch-submit {
-        height: 43px;
-        min-width: 70px;
-        border: 3px solid #aa5b09;
-        border-radius: 12px;
-        background: linear-gradient(180deg, #ffb135 0%, #ff7a10 100%);
-        color: #fff;
-        font: 900 20px/1 inherit;
-        text-shadow: 0 2px 0 rgb(111 52 0 / 40%);
-        box-shadow: inset 0 2px 0 rgb(255 255 255 / 45%);
+        position: absolute;
+        right: 4%;
+        top: 28%;
+        width: 24%;
+        height: 56%;
+        border: 0;
+        border-radius: 0;
+        background: transparent;
+        color: transparent;
+        font-size: 0;
+        appearance: none;
       }
 
       .custom-branch-row {
         position: absolute;
-        left: 12%;
-        top: 56.2%;
-        width: 76%;
-        min-height: 14.5%;
+        left: 17.2%;
+        top: 56.9%;
+        width: 74%;
+        height: 8.9%;
         display: none;
-        grid-template-columns: 42px 1fr auto;
-        gap: 9px;
+        grid-template-columns: 37px minmax(0, 1fr);
+        gap: 8px;
         align-items: center;
-        padding: 10px 11px;
-        border: 3px solid #f39821;
-        border-radius: 10px;
-        background: #fff8e9;
-        box-shadow:
-          0 7px 0 #a85713,
-          0 14px 22px rgb(0 0 0 / 18%);
+        padding: 0 25% 0 0;
+        border: 0;
+        background: transparent;
+        box-shadow: none;
+        pointer-events: none;
       }
 
       .stage.has-custom-branch .choice-form {
@@ -281,8 +282,8 @@
       }
 
       .custom-avatar {
-        width: 42px;
-        height: 42px;
+        width: 37px;
+        height: 37px;
         border: 2px solid #fff;
       }
 
@@ -292,27 +293,30 @@
 
       .custom-branch-name {
         color: #8d4dff;
-        font: 900 17px/1.15 inherit;
+        font: 900 16px/1.1 inherit;
       }
 
       .custom-branch-text {
-        margin-top: 4px;
+        margin-top: 2px;
         color: #171329;
-        font: 900 17px/1.2 inherit;
+        font: 900 15px/1.16 inherit;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
       }
 
       .custom-branch-status {
-        align-self: start;
-        margin-top: 5px;
-        padding: 4px 7px;
+        position: absolute;
+        right: 5%;
+        top: 50%;
+        transform: translateY(-50%);
+        padding: 5px 8px;
         border-radius: 999px;
         background: #ffe7a6;
         color: #a35b00;
         font: 900 12px/1 inherit;
         white-space: nowrap;
+        box-shadow: 0 2px 8px rgb(99 54 0 / 12%);
       }
 
       .stage.is-generating-branch .custom-branch-status::before {
@@ -513,7 +517,8 @@
         animation: bob 920ms ease-in-out infinite alternate;
       }
 
-      .stage.has-choice-button:not(.is-choice-open) .branch-trigger {
+      .stage.has-choice-button.is-branch-page:not(.is-choice-open)
+        .branch-trigger {
         display: inline-flex;
         align-items: center;
         gap: 8px;
@@ -905,8 +910,18 @@
         });
       };
 
+      const getCurrentPageIndex = () =>
+        Math.round(track.scrollLeft / getPageWidth());
+
+      const updatePageState = () => {
+        stage.classList.toggle(
+          "is-branch-page",
+          getCurrentPageIndex() === mainPageCount - 1,
+        );
+      };
+
       const snapToNearestPage = () => {
-        const index = Math.round(track.scrollLeft / getPageWidth());
+        const index = getCurrentPageIndex();
         scrollToPage(index);
       };
 
@@ -921,6 +936,7 @@
         if (isOpen) {
           track.scrollLeft = (mainPageCount - 1) * getPageWidth();
         }
+        updatePageState();
         stage.classList.toggle("is-choice-open", isOpen);
         stage.classList.toggle(
           "has-choice-button",
@@ -956,7 +972,7 @@
       const autoSlideFromTap = (clientX) => {
         const stageRect = stage.getBoundingClientRect();
         const localX = clientX - stageRect.left;
-        const currentPageIndex = Math.round(track.scrollLeft / getPageWidth());
+        const currentPageIndex = getCurrentPageIndex();
         let targetPageIndex = currentPageIndex;
 
         if (localX < stageRect.width / 3) {
@@ -1141,6 +1157,11 @@
       track.addEventListener("pointercancel", finishDrag);
       originalChoiceButton.addEventListener("click", openOriginalBranch);
       branchTriggerButton.addEventListener("click", openChoiceFromButton);
+      customBranchForm.addEventListener("click", (event) => {
+        if (event.target !== customBranchSubmit) {
+          customBranchInput.focus();
+        }
+      });
       customBranchForm.addEventListener("submit", submitCustomBranch);
 
       track.addEventListener(
@@ -1172,7 +1193,14 @@
         { passive: false },
       );
 
-      track.addEventListener("scroll", scheduleProgressUpdate, { passive: true });
+      track.addEventListener(
+        "scroll",
+        () => {
+          scheduleProgressUpdate();
+          updatePageState();
+        },
+        { passive: true },
+      );
       window.addEventListener("resize", () => {
         if (isChoiceOpen) {
           track.scrollLeft = getMaxRegularScroll();
@@ -1180,9 +1208,11 @@
         updateMediaLayout();
         snapToNearestPage();
         scheduleProgressUpdate();
+        updatePageState();
       });
       updateMediaLayout();
       updateProgress();
+      updatePageState();
     </script>
   </body>
 </html>
