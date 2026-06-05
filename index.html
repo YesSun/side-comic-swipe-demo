@@ -11,7 +11,8 @@
       :root {
         color-scheme: dark;
         --comic-ratio: 588 / 1280;
-        --surface: #0b0b0d;
+        --surface: #111;
+        --app-height: 100dvh;
       }
 
       * {
@@ -35,10 +36,13 @@
       }
 
       .stage {
-        position: relative;
+        position: fixed;
+        top: 0;
+        left: 0;
         width: 100vw;
         height: 100vh;
         height: 100dvh;
+        height: var(--app-height, 100dvh);
         overflow: hidden;
         background: #111;
         box-shadow: none;
@@ -541,6 +545,7 @@
         .stage {
           width: 100vw;
           height: 100dvh;
+          height: var(--app-height, 100dvh);
           box-shadow: none;
         }
       }
@@ -757,6 +762,26 @@
           ? imageMetrics.mobileChromeCropTop
           : 0;
 
+      const updateViewportSize = () => {
+        const isNarrowScreen = window.matchMedia("(max-width: 720px)").matches;
+        const viewportHeights = [
+          window.innerHeight,
+          document.documentElement.clientHeight,
+          window.visualViewport?.height,
+        ];
+        if (isNarrowScreen) {
+          viewportHeights.push(window.screen?.height);
+        }
+
+        const appHeight = Math.ceil(
+          Math.max(...viewportHeights.filter((height) => height > 0)),
+        );
+        document.documentElement.style.setProperty(
+          "--app-height",
+          `${appHeight}px`,
+        );
+      };
+
       const getMediaLayout = () => {
         const stageRect = stage.getBoundingClientRect();
         const cropTop = getSourceCropTop();
@@ -775,6 +800,7 @@
       };
 
       const updateMediaLayout = () => {
+        updateViewportSize();
         const media = getMediaLayout();
         stage.style.setProperty("--media-x", `${media.x}px`);
         stage.style.setProperty("--media-y", `${media.y}px`);
@@ -1234,7 +1260,8 @@
         },
         { passive: true },
       );
-      window.addEventListener("resize", () => {
+
+      const refreshLayout = () => {
         if (isChoiceOpen) {
           track.scrollLeft = getMaxRegularScroll();
         }
@@ -1242,6 +1269,24 @@
         snapToNearestPage();
         scheduleProgressUpdate();
         updatePageState();
+      };
+
+      let layoutRefreshFrame = 0;
+      const scheduleLayoutRefresh = () => {
+        window.cancelAnimationFrame(layoutRefreshFrame);
+        layoutRefreshFrame = window.requestAnimationFrame(() => {
+          layoutRefreshFrame = window.requestAnimationFrame(refreshLayout);
+        });
+      };
+
+      window.addEventListener("resize", scheduleLayoutRefresh);
+      window.addEventListener("orientationchange", scheduleLayoutRefresh);
+      window.addEventListener("pageshow", scheduleLayoutRefresh);
+      window.addEventListener("load", scheduleLayoutRefresh);
+      window.visualViewport?.addEventListener("resize", scheduleLayoutRefresh);
+      window.visualViewport?.addEventListener("scroll", scheduleLayoutRefresh);
+      [120, 360, 800, 1400].forEach((delay) => {
+        window.setTimeout(refreshLayout, delay);
       });
       updateMediaLayout();
       updateProgress();
