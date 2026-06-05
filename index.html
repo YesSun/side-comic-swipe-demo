@@ -99,7 +99,7 @@
       .slide-progress {
         position: absolute;
         inset: 0;
-        z-index: 2;
+        z-index: 6;
         pointer-events: none;
       }
 
@@ -125,7 +125,7 @@
       .choice-overlay {
         position: absolute;
         inset: 0;
-        z-index: 3;
+        z-index: 5;
         opacity: 0;
         pointer-events: none;
         transform: scale(0.9);
@@ -167,6 +167,378 @@
         top: 30%;
         width: 77%;
         height: 14%;
+      }
+
+      .choice-form {
+        position: absolute;
+        left: 12%;
+        top: 56.8%;
+        width: 76%;
+        min-height: 13.5%;
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 8px;
+        align-items: center;
+        padding: 10px 11px;
+        border: 3px solid #f39821;
+        border-radius: 10px;
+        background: #fff8e9;
+        box-shadow:
+          0 7px 0 #a85713,
+          0 14px 22px rgb(0 0 0 / 18%);
+      }
+
+      .custom-branch-input {
+        min-width: 0;
+        height: 39px;
+        border: 2px solid #e5dccb;
+        border-radius: 8px;
+        padding: 0 12px;
+        background: #fff;
+        color: #312a22;
+        font: 700 14px/1.2 inherit;
+        outline: none;
+      }
+
+      .custom-branch-input::placeholder {
+        color: #a69e94;
+      }
+
+      .custom-branch-submit {
+        height: 43px;
+        min-width: 70px;
+        border: 3px solid #aa5b09;
+        border-radius: 12px;
+        background: linear-gradient(180deg, #ffb135 0%, #ff7a10 100%);
+        color: #fff;
+        font: 900 20px/1 inherit;
+        text-shadow: 0 2px 0 rgb(111 52 0 / 40%);
+        box-shadow: inset 0 2px 0 rgb(255 255 255 / 45%);
+      }
+
+      .custom-branch-row {
+        position: absolute;
+        left: 12%;
+        top: 56.2%;
+        width: 76%;
+        min-height: 14.5%;
+        display: none;
+        grid-template-columns: 42px 1fr auto;
+        gap: 9px;
+        align-items: center;
+        padding: 10px 11px;
+        border: 3px solid #f39821;
+        border-radius: 10px;
+        background: #fff8e9;
+        box-shadow:
+          0 7px 0 #a85713,
+          0 14px 22px rgb(0 0 0 / 18%);
+      }
+
+      .stage.has-custom-branch .choice-form {
+        display: none;
+      }
+
+      .stage.has-custom-branch .custom-branch-row {
+        display: grid;
+      }
+
+      .custom-avatar,
+      .feed-avatar-art {
+        position: relative;
+        display: grid;
+        place-items: center;
+        overflow: hidden;
+        border-radius: 50%;
+        background:
+          radial-gradient(circle at 50% 38%, #ffd0a9 0 39%, transparent 40%),
+          radial-gradient(circle at 49% 70%, #e94432 0 28%, transparent 29%),
+          linear-gradient(135deg, #ffde52, #3bb7ff);
+      }
+
+      .custom-avatar::before,
+      .feed-avatar-art::before {
+        content: "";
+        position: absolute;
+        top: 19%;
+        width: 48%;
+        height: 19%;
+        border-radius: 999px;
+        background: #151313;
+        box-shadow: -8px 7px 0 -5px #151313, 8px 7px 0 -5px #151313;
+      }
+
+      .custom-avatar::after,
+      .feed-avatar-art::after {
+        content: "新";
+        position: relative;
+        z-index: 1;
+        margin-top: 20px;
+        color: #fff;
+        font-weight: 900;
+        font-size: 13px;
+        text-shadow: 0 1px 2px rgb(0 0 0 / 45%);
+      }
+
+      .custom-avatar {
+        width: 42px;
+        height: 42px;
+        border: 2px solid #fff;
+      }
+
+      .custom-branch-body {
+        min-width: 0;
+      }
+
+      .custom-branch-name {
+        color: #8d4dff;
+        font: 900 17px/1.15 inherit;
+      }
+
+      .custom-branch-text {
+        margin-top: 4px;
+        color: #171329;
+        font: 900 17px/1.2 inherit;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .custom-branch-status {
+        align-self: start;
+        margin-top: 5px;
+        padding: 4px 7px;
+        border-radius: 999px;
+        background: #ffe7a6;
+        color: #a35b00;
+        font: 900 12px/1 inherit;
+        white-space: nowrap;
+      }
+
+      .stage.is-generating-branch .custom-branch-status::before {
+        content: "";
+        display: inline-block;
+        width: 6px;
+        height: 6px;
+        margin-right: 4px;
+        border-radius: 50%;
+        background: currentColor;
+        animation: pulse 760ms ease-in-out infinite alternate;
+        vertical-align: 1px;
+      }
+
+      .fixed-feed {
+        position: absolute;
+        inset: 0;
+        z-index: 6;
+        pointer-events: none;
+      }
+
+      .feed-rail-scrim {
+        position: absolute;
+        top: 41%;
+        right: 0;
+        bottom: 15%;
+        width: 112px;
+        opacity: 0.16;
+        background: linear-gradient(
+          90deg,
+          rgb(0 0 0 / 0%) 0%,
+          rgb(0 0 0 / 28%) 42%,
+          rgb(0 0 0 / 46%) 100%
+        );
+        transition: opacity 140ms ease;
+      }
+
+      .stage.is-swiping .feed-rail-scrim {
+        opacity: 0.82;
+      }
+
+      .feed-rail {
+        position: absolute;
+        right: 5px;
+        bottom: 138px;
+        display: grid;
+        justify-items: center;
+        gap: 13px;
+        color: #fff;
+        text-shadow: 0 2px 4px rgb(0 0 0 / 35%);
+      }
+
+      .feed-avatar {
+        position: relative;
+        width: 48px;
+        height: 57px;
+      }
+
+      .feed-avatar-art {
+        width: 46px;
+        height: 46px;
+        border: 2px solid rgb(255 255 255 / 90%);
+        box-shadow: 0 2px 8px rgb(0 0 0 / 24%);
+      }
+
+      .feed-plus {
+        position: absolute;
+        right: -4px;
+        bottom: 2px;
+        display: grid;
+        place-items: center;
+        width: 27px;
+        height: 22px;
+        border-radius: 999px;
+        background: #f4ff35;
+        color: #171717;
+        font: 900 23px/1 Arial, sans-serif;
+        box-shadow: 0 2px 5px rgb(0 0 0 / 25%);
+      }
+
+      .feed-action {
+        position: relative;
+        display: grid;
+        justify-items: center;
+        gap: 4px;
+        min-width: 58px;
+        padding: 2px 0 3px;
+      }
+
+      .feed-action::before {
+        content: "";
+        position: absolute;
+        inset: -5px 0 -4px;
+        border-radius: 24px;
+        background: rgb(20 19 24 / 24%);
+        backdrop-filter: blur(2px);
+      }
+
+      .feed-icon {
+        position: relative;
+        z-index: 1;
+        width: 42px;
+        height: 42px;
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 3.7;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        filter: drop-shadow(0 2px 2px rgb(0 0 0 / 22%));
+      }
+
+      .feed-count {
+        position: relative;
+        z-index: 1;
+        color: rgb(255 255 255 / 92%);
+        font: 700 16px/1 inherit;
+      }
+
+      .story-entry {
+        position: absolute;
+        right: 16px;
+        bottom: 74px;
+        left: 16px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        height: 56px;
+        padding: 0 14px;
+        border: 1px solid rgb(255 255 255 / 18%);
+        border-radius: 28px;
+        background: rgb(154 145 154 / 74%);
+        color: #fff;
+        font: 800 17px/1 inherit;
+        letter-spacing: 0;
+        box-shadow:
+          inset 0 1px 0 rgb(255 255 255 / 15%),
+          0 6px 18px rgb(0 0 0 / 12%);
+        backdrop-filter: blur(7px);
+      }
+
+      .story-entry-icon {
+        display: grid;
+        place-items: center;
+        width: 34px;
+        height: 34px;
+        flex: 0 0 auto;
+        border-radius: 50%;
+        background: #ecff45;
+        color: #506100;
+        font: 900 21px/1 Arial, sans-serif;
+      }
+
+      .story-entry-text {
+        min-width: 0;
+        flex: 1;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
+
+      .story-entry-chevron {
+        color: rgb(255 255 255 / 55%);
+        font-size: 34px;
+        line-height: 1;
+      }
+
+      .branch-trigger {
+        position: absolute;
+        left: 50%;
+        bottom: 148px;
+        z-index: 7;
+        display: none;
+        transform: translateX(-50%);
+        border: 3px solid #53238e;
+        border-radius: 999px;
+        padding: 10px 18px 10px 16px;
+        background:
+          radial-gradient(circle at 18% 25%, #fff 0 9%, transparent 10%),
+          linear-gradient(135deg, #fff34d 0%, #ff8a1f 42%, #8b4dff 100%);
+        color: #fff;
+        font: 900 18px/1 inherit;
+        text-shadow: 0 2px 0 rgb(53 21 99 / 55%);
+        box-shadow:
+          0 5px 0 #351563,
+          0 12px 24px rgb(0 0 0 / 28%);
+        pointer-events: auto;
+        animation: bob 920ms ease-in-out infinite alternate;
+      }
+
+      .stage.has-choice-button:not(.is-choice-open) .branch-trigger {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .branch-trigger::after {
+        content: "!";
+        display: grid;
+        place-items: center;
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        background: #ff2e7a;
+        border: 2px solid #fff;
+      }
+
+      @keyframes bob {
+        from {
+          transform: translate(-50%, 0) rotate(-1deg);
+        }
+
+        to {
+          transform: translate(-50%, -6px) rotate(1deg);
+        }
+      }
+
+      @keyframes pulse {
+        from {
+          opacity: 0.35;
+          transform: scale(0.75);
+        }
+
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
       }
 
       .comic-page[hidden] {
@@ -227,6 +599,44 @@
           <span class="progress-thumb"></span>
         </div>
       </div>
+      <div class="fixed-feed" aria-hidden="true">
+        <div class="feed-rail-scrim"></div>
+        <div class="feed-rail">
+          <div class="feed-avatar">
+            <div class="feed-avatar-art"></div>
+            <div class="feed-plus">+</div>
+          </div>
+          <div class="feed-action">
+            <svg class="feed-icon" viewBox="0 0 48 48" aria-hidden="true">
+              <path
+                d="M24 41S7 31.6 7 18.7C7 12.4 11 8 16.6 8c3.2 0 6 1.7 7.4 4.4C25.4 9.7 28.2 8 31.4 8 37 8 41 12.4 41 18.7 41 31.6 24 41 24 41Z"
+              />
+            </svg>
+            <span class="feed-count">260</span>
+          </div>
+          <div class="feed-action">
+            <svg class="feed-icon" viewBox="0 0 48 48" aria-hidden="true">
+              <path
+                d="M9 22.8C9 14.8 15.7 9 24.1 9S39 14.8 39 22.8 32.3 36.6 24 36.6c-2.1 0-4-.3-5.8-1l-7 3.4 2.1-6.5A13.2 13.2 0 0 1 9 22.8Z"
+              />
+            </svg>
+            <span class="feed-count">32</span>
+          </div>
+          <div class="feed-action">
+            <svg class="feed-icon" viewBox="0 0 48 48" aria-hidden="true">
+              <path d="M38 7 9 23.5l13 4.7L28 41l10-34Z" />
+              <path d="m22 28.2 15.2-20" />
+            </svg>
+            <span class="feed-count">25</span>
+          </div>
+        </div>
+        <div class="story-entry">
+          <span class="story-entry-icon">✿</span>
+          <span class="story-entry-text">灵感来了 · crush 转正的奇葩故事</span>
+          <span class="story-entry-chevron">›</span>
+        </div>
+      </div>
+      <button class="branch-trigger" type="button">选择支线</button>
       <div class="choice-overlay" aria-hidden="true">
         <img src="./assets/page-08-popup.png" alt="" draggable="false" />
         <button
@@ -234,6 +644,26 @@
           type="button"
           aria-label="选择原作"
         ></button>
+        <form class="choice-form" autocomplete="off">
+          <input
+            class="custom-branch-input"
+            name="branch"
+            type="text"
+            inputmode="text"
+            maxlength="34"
+            placeholder="写下你想看的下一步剧情......"
+            aria-label="填写支线内容"
+          />
+          <button class="custom-branch-submit" type="submit">发布</button>
+        </form>
+        <div class="custom-branch-row" aria-live="polite">
+          <div class="custom-avatar"></div>
+          <div class="custom-branch-body">
+            <div class="custom-branch-name">灰太狼：</div>
+            <div class="custom-branch-text"></div>
+          </div>
+          <div class="custom-branch-status">生成中</div>
+        </div>
       </div>
     </main>
 
@@ -244,6 +674,13 @@
       const originalChoiceButton = document.querySelector(
         ".choice-action--original",
       );
+      const branchTriggerButton = document.querySelector(".branch-trigger");
+      const customBranchForm = document.querySelector(".choice-form");
+      const customBranchInput = document.querySelector(".custom-branch-input");
+      const customBranchSubmit = document.querySelector(
+        ".custom-branch-submit",
+      );
+      const customBranchText = document.querySelector(".custom-branch-text");
       let pages = [...document.querySelectorAll(".comic-page:not([hidden])")];
       const progressTrack = document.querySelector(".progress-track");
       const progressThumb = document.querySelector(".progress-thumb");
@@ -270,7 +707,9 @@
       let dragVelocityX = 0;
       let isDragging = false;
       let isChoiceOpen = false;
+      let hasSeenChoice = false;
       let isOriginalBranchOpen = false;
+      let hasCustomBranch = false;
       let activePointerId = null;
       let progressFrame = 0;
       let overswipeProgress = 0;
@@ -330,11 +769,18 @@
 
       const setChoiceOpen = (isOpen) => {
         isChoiceOpen = isOpen;
+        if (isOpen) {
+          hasSeenChoice = true;
+        }
         overswipeProgress = isOpen ? 1 : 0;
         if (isOpen) {
-          track.scrollLeft = getMaxRegularScroll();
+          track.scrollLeft = (mainPageCount - 1) * getPageWidth();
         }
         stage.classList.toggle("is-choice-open", isOpen);
+        stage.classList.toggle(
+          "has-choice-button",
+          hasSeenChoice && !isOpen,
+        );
         scheduleProgressUpdate();
       };
 
@@ -353,6 +799,30 @@
           scrollToPage(mainPageCount);
           scheduleProgressUpdate();
         });
+      };
+
+      const openChoiceFromButton = () => {
+        if (isOriginalBranchOpen) {
+          scrollToPage(mainPageCount - 1);
+        }
+        setChoiceOpen(true);
+      };
+
+      const submitCustomBranch = (event) => {
+        event.preventDefault();
+        const value = customBranchInput.value.trim();
+        if (!value) {
+          customBranchInput.focus();
+          return;
+        }
+
+        hasCustomBranch = true;
+        customBranchText.textContent = value;
+        customBranchSubmit.textContent = "AI 生成中";
+        customBranchInput.disabled = true;
+        customBranchSubmit.disabled = true;
+        stage.classList.add("has-custom-branch", "is-generating-branch");
+        setChoiceOpen(true);
       };
 
       const updateProgress = () => {
@@ -411,6 +881,7 @@
         dragVelocityX = 0;
         overswipeProgress = 0;
         track.classList.add("is-dragging");
+        stage.classList.add("is-swiping");
         track.setPointerCapture(activePointerId);
       });
 
@@ -461,6 +932,7 @@
         isDragging = false;
         activePointerId = null;
         track.classList.remove("is-dragging");
+        stage.classList.remove("is-swiping");
         if (!isChoiceOpen) {
           const distanceThreshold = getPageWidth() * 0.5;
           const velocityThreshold = 0.55;
@@ -492,6 +964,8 @@
       track.addEventListener("pointerup", finishDrag);
       track.addEventListener("pointercancel", finishDrag);
       originalChoiceButton.addEventListener("click", openOriginalBranch);
+      branchTriggerButton.addEventListener("click", openChoiceFromButton);
+      customBranchForm.addEventListener("submit", submitCustomBranch);
 
       track.addEventListener(
         "wheel",
